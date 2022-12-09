@@ -19,5 +19,9 @@ from  enrool import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.sign_up,name='sing_up')
+    path('', views.user_signup,name='sing_up'),
+    path('login/',views.user_login,name='login'),
+    path('profile/',views.user_profile,name='profile'),
+    path('logout',views.user_logout,name='logout')
+
 ]
