@@ -1,2 +1,5 @@
-# User_Registration_Form
-Feature - Sing up, Log in, Log out, Change password
+### User Registration Form
+
+- signup form (using Django Form authentication)
+- authenticate user can log in. 
+- then the user can see and edit profile details
