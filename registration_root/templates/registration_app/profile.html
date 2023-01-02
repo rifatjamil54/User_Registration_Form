@@ -5,42 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+
+        <style>
+        div {text-align: center;}
+        </style>
 </head>
+
 <body>
-    <h1>Profile</h1>
+    <div>
 
-    {% if name %}
-
-    <h2>Hello {{name}}, Welcome to your profile.</h2>
-    {% endif %}
-
-    {% if messages %}
-    {% for mg in messages %}
-    {{mg}}
-    {% endfor %}
-    {% endif %}
-    <br>
-    <form action="" method="POST" novalidate> {% csrf_token %}
-
-        {% if form.non_field_errors %}       
-        {% for errors in form.non_field_errors %}
-        <p>{{errors}}</p>
-        {% endfor %}
-        {% endif %}
-
-        {% for fm in form %}
-        {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
-        {% endfor %}
-
-        <input type="submit" value="Submit">
-        
-    </form>
-
+        <h1>Profile</h1>
 
     
-    <a href="{% url 'logout_profile' %}"> Logout </a><br>
-    <a href="{% url 'changing_password' %}"> Change your password </a><br>
+        <div>
+            {% if users != None %}
+        
+            <h3>All List of Users</h3>
+                {% for user in users %}
+                     <a href="{% url 'admin_user_profile' user.id %}">{{user.username}}</a><br>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <h2>User details</h2>
+        {% if messages %}
+        {% for mg in messages %}
+        {{mg}}
+        {% endfor %}
+        {% endif %}
+        <br>
+        <form action="" method="POST" novalidate> {% csrf_token %}
+    
+            {% if form.non_field_errors %}       
+            {% for errors in form.non_field_errors %}
+            <p>{{errors}}</p>
+            {% endfor %}
+            {% endif %}
+    
+            {% for fm in form %}
+            {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+            {% endfor %}
+    
+            <input type="submit" value="Submit">
+            
+        </form>
+    
+    
+        
+        <a href="{% url 'logout_profile' %}"> Logout </a><br>
+        <a href="{% url 'changing_password' %}"> Change your password </a><br>
+    
 
+    </div>
+   
 
     
 </body>

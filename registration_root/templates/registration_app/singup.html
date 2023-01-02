@@ -5,8 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SingUp Forms</title>
+    <style>
+        div {text-align: center;}
+     </style>
 </head>
-<body>
+<body>    
+<div>
+
+    <h1>SingUp</h1>
     <form action="" method="POST" novalidate> {% csrf_token %}
 
         {% for form in singup_form %}
@@ -21,6 +27,10 @@
     {% endif %}
     <br>
     <a href="{% url 'login_url' %}"> Login </a>
+
+</div>
+
+   
 
 </body>
 </html>

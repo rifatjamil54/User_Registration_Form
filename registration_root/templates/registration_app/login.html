@@ -9,9 +9,12 @@
         .warning{
             color: red;
         }
+        div {text-align: center;}
+
     </style>
 </head>
 <body>
+<div>
     <h1>Login</h1>
     <form action="" method="POST" novalidate> {% csrf_token %}
 
@@ -38,6 +41,7 @@
     {% endif %}
     <br>
     <a href="{% url 'singup_url' %}"> Singup </a>
+</div>
 
 </body>
 </html>

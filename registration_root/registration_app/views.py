@@ -1,8 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect
-from .forms import SingUp_Forms, UserEditForms
+from .forms import SingUp_Forms, UserEditForms, AdminEditForms
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -16,6 +17,7 @@ def singup_page_rendering(request):
     else:
         singup_form = SingUp_Forms()    
     return render(request, 'registration_app/singup.html',{'singup_form':singup_form})
+
 
 
 def login_page_rendering(request):
@@ -37,28 +39,41 @@ def login_page_rendering(request):
         return HttpResponseRedirect('/registration_app/profile/')
 
 
+
 def profile_page_rendering(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            fm = UserEditForms(request.POST, instance=request.user)
-            if fm.is_valid():
-                messages.success(request, "Profile Update!")
-                fm.save()
-        else:        
-            fm = UserEditForms(instance=request.user)
-        return render(request,'registration_app/profile.html', {'name':request.user, 'form':fm})    
+            if request.user.is_superuser == True:
+                fm = AdminEditForms(request.POST, instance=request.user)
+                user = User.objects.all()
+            else:        
+                fm = UserEditForms(request.POST, instance=request.user)
+                user = None
+                if fm.is_valid():
+                    messages.success(request, "Profile Update!")
+                    fm.save()
+        else:
+            if request.user.is_superuser ==True:
+                fm = AdminEditForms(instance = request.user)
+                user = User.objects.all()
+            else:    
+                fm = UserEditForms(instance=request.user)
+                user = None
+        return render(request,'registration_app/profile.html', {'name':request.user, 'form':fm, 'users':user})    
     else:
         messages.success(request,'Please login first!')
         return HttpResponseRedirect('/registration_app/login/')
+
 
 
 def logout_profile(request):
     logout(request)
     return HttpResponseRedirect('/registration_app/login/')
 
+
+
 def changing_password(request):
     if request.user.is_authenticated:
-
         if request.method == 'POST':
             fm = PasswordChangeForm(user=request.user, data=request.POST)
             if fm.is_valid():
@@ -72,3 +87,16 @@ def changing_password(request):
     else:
         messages.success(request,'Please login first!')
         return HttpResponseRedirect('/registration_app/login/')
+
+
+
+def admin_user_profile(request, id):
+    if request.method == "POST":
+        pi = User.objects.get(pk=id)
+        fm = AdminEditForms(request.POST, instance= pi)
+        if fm.is_valid():
+            fm.save()
+    else:    
+        pi = User.objects.get(pk=id)
+        fm = AdminEditForms(instance= pi)
+    return render(request, 'registration_app/admin_user_profile.html', {"forms":fm})    
